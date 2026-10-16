@@ -251,6 +251,7 @@ mod tests {
             port_chain: vec![1, port],
             device_address: 5,
             trigger_interface: trigger.then_some(2),
+            serial: None,
             product: None,
         }
     }

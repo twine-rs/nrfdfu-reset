@@ -75,6 +75,7 @@ mod tests {
                     port_chain: vec![1, 3],
                     device_address: 7,
                     trigger_interface: Some(2),
+                    serial: None,
                     product: Some("nRF52 USB".into()),
                 },
                 DeviceMatch {
@@ -84,6 +85,7 @@ mod tests {
                     port_chain: vec![1, 4],
                     device_address: 9,
                     trigger_interface: Some(2),
+                    serial: None,
                     product: None,
                 },
             ],

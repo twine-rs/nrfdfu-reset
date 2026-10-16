@@ -33,13 +33,23 @@ List candidate devices (defaults to Nordic's vendor ID `0x1915`):
 nrfdfu-reset list
 nrfdfu-reset list --vid 1915
 nrfdfu-reset list --vid 1915 --pid 521f
+nrfdfu-reset list --port 01-1.4
+nrfdfu-reset list --serial ECC33BB31858
 ```
 
-Output shows VID:PID, the physical port path, whether the device exposes the
-DFU trigger interface, and the product string:
+The table shows the VID, PID, physical port path, serial number, whether the
+device exposes the DFU trigger interface, and the product string:
 
 ```text
-1915:520f  port 01-1.4        trigger: yes  nRF52 Connectivity
+VID   PID   PORT    SERIAL            TRIGGER  PRODUCT
+1915  cafe  01-1.4  ECC33BB31858      yes      nRF528xx OpenThread Device
+1915  154b  01-1.1  0CFCA5D7BE37BA10  no       nRF 802154 Sniffer
+```
+
+Pass `--json` to print the same fields as a JSON array for scripting:
+
+```sh
+nrfdfu-reset list --json
 ```
 
 Reset the matching device into DFU mode:
@@ -53,6 +63,14 @@ nrfdfu-reset reset --vid 1915 --pid 520f --timeout 10
 the trigger interface. Zero or multiple matches exit non-zero with a message
 listing the candidates so you can narrow the filter. `--pid` requires `--vid`.
 VID/PID values are hexadecimal, with or without a `0x` prefix.
+
+When two identical devices are attached, VID and PID cannot distinguish them.
+Use `--port` with the port path that `list` prints, or `--serial` with the
+exact serial number. Each works on its own and suppresses the default Nordic
+VID. Port paths are specific to one machine and hub layout, so scripts that
+must keep working after a re-plug should prefer `--serial`. The serial selects the device
+before the reset only. Verification after the reset always uses the port path,
+because serial numbers can change between application and bootloader mode.
 
 Before the reset, the tool reads the application's firmware version from the
 trigger interface and logs it (best effort). After the reset, the tool waits
